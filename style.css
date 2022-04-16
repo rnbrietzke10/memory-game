@@ -1,0 +1,24 @@
+#game div {
+  border: 1px solid black;
+  width: 15%;
+  height: 200px;
+  margin: 10px;
+  display: inline-block;
+}
+
+.disable-click {
+  pointer-events: none;
+}
+
+section {
+  width: 100%;
+  margin-left: 100px;
+  display: flex;
+  font-size: 60px;
+}
+
+#score {
+  font-size: 80px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
