@@ -1,19 +1,20 @@
-const gameContainer = document.getElementById("game");
-const playerScore = document.getElementById("score");
+const gameContainer = document.getElementById('game');
+const playerScore = document.getElementById('score');
 let colorMatch = [];
 let count = 0;
 let score = 0;
+let click = '';
 const COLORS = [
-  "red",
-  "blue",
-  "green",
-  "orange",
-  "purple",
-  "red",
-  "blue",
-  "green",
-  "orange",
-  "purple",
+  'red',
+  'blue',
+  'green',
+  'orange',
+  'purple',
+  'red',
+  'blue',
+  'green',
+  'orange',
+  'purple',
 ];
 
 // here is a helper function to shuffle an array
@@ -47,13 +48,13 @@ let shuffledColors = shuffle(COLORS);
 function createDivsForColors(colorArray) {
   for (let color of colorArray) {
     // create a new div
-    const newDiv = document.createElement("div");
+    const newDiv = document.createElement('div');
 
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(color);
 
     // call a function handleCardClick when a div is clicked on
-    newDiv.addEventListener("click", handleCardClick);
+    newDiv.addEventListener('click', handleCardClick);
 
     // append the div to the element with an id of game
     gameContainer.append(newDiv);
@@ -66,42 +67,41 @@ function handleCardClick(event) {
   // console.log('you just clicked', event.target);
   // console.log(event.target.className);
   // Sets card color to classname color
-  // Compare first click to second
-  // store event target in variable (global variable)
+  if (click === '' || click !== event.target) {
+    click = event.target;
+    if (count <= 2 && !event.target.classList.contains('.remove-click')) {
+      event.target.style.backgroundColor = event.target.className;
+      colorMatch.push(event.target.className);
 
-  if (count <= 2 && !event.target.classList.contains(".remove-click")) {
-    event.target.style.backgroundColor = event.target.className;
-    colorMatch.push(event.target.className);
-
-    if (colorMatch.length === 2 && colorMatch[0] === colorMatch[1]) {
-      document.querySelectorAll(`.${colorMatch[0]}`).forEach(el => {
-        el.removeEventListener("click", handleCardClick);
-      });
-
-      disableClicks();
-      colorMatch = [];
-      count = 0;
-      score++;
-    } else if (colorMatch.length === 2 && colorMatch[0] !== colorMatch[1]) {
-      score++;
-      // console.log(
-      //   `inside else if: ${colorMatch.length}  ${colorMatch[0]} ${colorMatch[1]}`
-      // );
-      disableClicks();
-      setTimeout(() => {
-        document.querySelectorAll(`.${colorMatch[0]}`).forEach(el => {
-          el.style.backgroundColor = "#fff";
+      if (colorMatch.length === 2 && colorMatch[0] === colorMatch[1]) {
+        document.querySelectorAll(`.${colorMatch[0]}`).forEach((el) => {
+          el.removeEventListener('click', handleCardClick);
+          click = '';
         });
 
-        document.querySelectorAll(`.${colorMatch[1]}`).forEach(el => {
-          el.style.backgroundColor = "#fff";
-        });
-
+        disableClicks();
         colorMatch = [];
         count = 0;
-      }, 1000);
+        score++;
+      } else if (colorMatch.length === 2 && colorMatch[0] !== colorMatch[1]) {
+        score++;
+
+        disableClicks();
+        setTimeout(() => {
+          document.querySelectorAll(`.${colorMatch[0]}`).forEach((el) => {
+            el.style.backgroundColor = '#fff';
+          });
+
+          document.querySelectorAll(`.${colorMatch[1]}`).forEach((el) => {
+            el.style.backgroundColor = '#fff';
+          });
+          click = '';
+          colorMatch = [];
+          count = 0;
+        }, 1000);
+      }
+      count++;
     }
-    count++;
   }
 
   playerScore.innerText = score;
@@ -111,12 +111,12 @@ function handleCardClick(event) {
 createDivsForColors(shuffledColors);
 
 function disableClicks() {
-  document.querySelectorAll("div").forEach(el => {
-    el.classList.add(".disable");
+  document.querySelectorAll('div').forEach((el) => {
+    el.classList.add('.disable');
   });
   setTimeout(() => {
-    document.querySelectorAll("div").forEach(el => {
-      el.classList.remove(".disable");
+    document.querySelectorAll('div').forEach((el) => {
+      el.classList.remove('.disable');
     });
   }, 1000);
 }
